@@ -35,7 +35,7 @@ func TestRead(t *testing.T) {
 
 type badReader int
 
-func (b badReader) Read(p []byte) (n int, err error) {
+func (b badReader) Read(_ []byte) (n int, err error) {
 	return 0, errors.New("bad read")
 }
 

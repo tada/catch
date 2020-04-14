@@ -50,7 +50,7 @@ func TestWriteRune(t *testing.T) {
 
 type badWriter int
 
-func (b badWriter) Write(p []byte) (n int, err error) {
+func (b badWriter) Write(_ []byte) (n int, err error) {
 	return 0, errors.New("bad write")
 }
 

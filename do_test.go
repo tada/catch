@@ -12,7 +12,7 @@ import (
 func ExampleDo() {
 	err := catch.Do(func() {
 		if err := os.Chmod("nosuchfile.noop", 0600); err != nil {
-			panic(catch.Error{Cause: err})
+			panic(catch.Error(err))
 		}
 	})
 	fmt.Println(err)
@@ -22,7 +22,7 @@ func ExampleDo() {
 func TestCatch_normal(t *testing.T) {
 	e := errors.New("the error")
 	err := catch.Do(func() {
-		panic(&catch.Error{Cause: e})
+		panic(catch.Error(e))
 	})
 	if err != e {
 		t.Errorf("expected %v, got %v", e, err)
@@ -32,7 +32,7 @@ func TestCatch_normal(t *testing.T) {
 func TestCatch_normalByValue(t *testing.T) {
 	e := errors.New("the error")
 	err := catch.Do(func() {
-		panic(catch.Error{Cause: e})
+		panic(catch.Error(e))
 	})
 	if err != e {
 		t.Errorf("expected %v, got %v", e, err)

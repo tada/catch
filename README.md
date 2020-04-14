@@ -1,4 +1,4 @@
-The tada/catch provides controlled recovery of panics using a special error implementation that has a cause (another error).
+Catch provides controlled recovery of panics using a special error implementation that has a cause (another error).
 
 [![](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![](https://goreportcard.com/badge/github.com/tada/catch)](https://goreportcard.com/report/github.com/tada/catch)
@@ -10,7 +10,7 @@ The tada/catch provides controlled recovery of panics using a special error impl
 ```sh
 go get github.com/tada/catch
 ```
-### Use case
+### Sample usage
 
 Consider the following code where more than half of the lines are devoted to error handling:
 ```go
@@ -30,13 +30,13 @@ func foo() (error, int) {
   return a + b * c
 }
 ```
-using catch on all involved functions, the code can instead very distinct:
+using `catch` on all involved functions, the code can instead very distinct:
 ```go
 func foo() int {
   return x() + y() * z()
 }
 ```
-Leaf functions such as x, y, and z, where errors are produced may look something like this without catch:
+Leaf functions such as x, y, and z, where errors are produced may look something like this without `catch`:
 ```go
 func x() (error, int) {
   err, v := computeSomeValue()
@@ -46,18 +46,18 @@ func x() (error, int) {
   return int(v)
 }
 ```
-and like this with tada/catch:
+and like this with `catch`:
 ```go
 func x() int {
   err, v := computeSomeValue()
   if err != nil {
-    panic(catch.Error{Cause: err})
+    panic(catch.Error(err))
   }
   return int(v)
 }
 ```
 At the very top, errors produced somewhere in the executed code can be recovered using the
-catch.Do function which will recover only `catch.Error` and return its cause:
+`catch.Do` function which will recover only `catch.Error` and return its cause:
 ```go
 func furtherUp() error {
   return catch.Do(func() {
