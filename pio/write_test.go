@@ -11,8 +11,8 @@ import (
 
 func TestWriteBool(t *testing.T) {
 	w := bytes.Buffer{}
-	pio.WriteBool(true, &w)
-	pio.WriteBool(false, &w)
+	pio.WriteBool(&w, true)
+	pio.WriteBool(&w, false)
 	a := w.String()
 	if a != "truefalse" {
 		t.Error("expected 'truefalse', got", a)
@@ -21,7 +21,7 @@ func TestWriteBool(t *testing.T) {
 
 func TestWriteInt(t *testing.T) {
 	w := bytes.Buffer{}
-	pio.WriteInt(12345, &w)
+	pio.WriteInt(&w, 12345)
 	a := w.String()
 	if a != "12345" {
 		t.Error("expected '12345', got", a)
@@ -30,7 +30,7 @@ func TestWriteInt(t *testing.T) {
 
 func TestWriteFloat(t *testing.T) {
 	w := bytes.Buffer{}
-	pio.WriteFloat(3.14159, &w)
+	pio.WriteFloat(&w, 3.14159)
 	a := w.String()
 	if a != "3.14159" {
 		t.Error("expected '3.14159', got", a)
@@ -39,9 +39,9 @@ func TestWriteFloat(t *testing.T) {
 
 func TestWriteRune(t *testing.T) {
 	w := bytes.Buffer{}
-	pio.WriteRune('a', &w)
-	pio.WriteRune('⌘', &w)
-	pio.WriteRune('x', &w)
+	pio.WriteRune(&w, 'a')
+	pio.WriteRune(&w, '⌘')
+	pio.WriteRune(&w, 'x')
 	a := w.String()
 	if a != "a⌘x" {
 		t.Error("expected 'a⌘x', got", a)
@@ -56,7 +56,7 @@ func (b badWriter) Write(_ []byte) (n int, err error) {
 
 func TestWriteError(t *testing.T) {
 	err := catch.Do(func() {
-		pio.WriteRune('⌘', badWriter(0))
+		pio.WriteRune(badWriter(0), '⌘')
 	})
 	if err == nil {
 		t.Fatal("expected error")
