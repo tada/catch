@@ -3,6 +3,7 @@ package pio_test
 import (
 	"bytes"
 	"errors"
+	"strconv"
 	"testing"
 
 	"github.com/tada/catch"
@@ -60,5 +61,16 @@ func TestWriteError(t *testing.T) {
 	})
 	if err == nil {
 		t.Fatal("expected error")
+	}
+}
+
+func TestWriteQuotedString(t *testing.T) {
+	b := bytes.Buffer{}
+	theString := "Quote \", BS \\, NewLine \n, Tab \t, VT \v, CR \r, \a, \b, \f, \x04, \u1234"
+	pio.WriteQuotedString(&b, theString)
+	e := strconv.Quote(theString)
+	a := b.String()
+	if e != a {
+		t.Errorf("expected `%s`, got `%s`", e, a)
 	}
 }
